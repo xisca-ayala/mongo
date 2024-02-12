@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const CredentialsSchema = new mongoose.Schema({
     address: String,
     phone: Number,
-    email: String
+    email: {
+        type: String,
+        minLength:6,
+        maxLength:40
+    }
 })
 
 module.exports = mongoose.model("Credentials", CredentialsSchema, "credentials");

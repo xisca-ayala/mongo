@@ -5,7 +5,10 @@ const ProfileSchema = new mongoose.Schema({
     surname: String, 
     dateOfBirth: Date,
     comments: String, 
-    rol: String
+    rol: {
+        type: String,
+        enum: ['estudiante', 'profesor']
+    }
 })
 
 module.exports = mongoose.model("Profile", ProfileSchema, "profile");
