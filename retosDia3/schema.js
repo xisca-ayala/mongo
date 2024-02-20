@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fs = require('fs'); 
 
 const TeachersSchema = new mongoose.Schema({
     teacher_first_name:String, 
@@ -19,7 +20,7 @@ const NotasSchema = new mongoose.Schema({
     student_last_name: {
         type: String, 
     },
-    gropu_name: {
+    group_name: {
         type: String, 
     },
     subject_name: {
@@ -30,4 +31,6 @@ const NotasSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Notas", NotasSchema, "notas");
+let Notas = mongoose.model("Notas", NotasSchema, "notas");
+
+module.exports = Notas; 
