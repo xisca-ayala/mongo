@@ -43,8 +43,7 @@ const notaMedia =() =>{
 
 const totalAlumnos =() =>{
     Notas
-    .aggregate([{$group: { "_id":"$student_first_name" }, 
-                "Cantidad": {$sum:1}}])
+    .aggregate([{$group: { "_id":"$student_first_name", "cantidad": {$sum:1} }}])
     .then((result)=>{
         console.log(result);
     })
@@ -53,21 +52,22 @@ const totalAlumnos =() =>{
     })
 };
 
-const listarAlumnos = () =>{
-    Notas
-    .aggregate([{$group:{"_id":"$student_first_name" },
-                "Cantidad":{$sum:1}},
-            { $project:{"Nombre": "$student_first_name",
-                        "Cantidad":1}}
-
-            ])
-    .then((result)=>{
-        console.log(result);
-    })
-    .catch((err)=>{
-        console.error(err);
-    })
-};
+// const listarAlumnos = () =>{
+//     Notas
+//     .aggregate([{$group:{"_id":{student_first_name:"$student_first_name", 
+//     student_last_name:"$student_last_name"}},
+//                 "Cantidad":{$sum:1}},
+//             { $project:{"_id": 0,
+//                         "Nombre": "$_id",
+//                         "Cantidad":1}}
+//             ])
+//     .then((result)=>{
+//         console.log(result);
+//     })
+//     .catch((err)=>{
+//         console.error(err);
+//     })
+// };
 
 const listarProfesores = () =>{
     Notas
@@ -83,23 +83,59 @@ const listarProfesores = () =>{
     })
 }
 
+const gruposAlumnos = () =>{
+    Notas
+    .aggregate([{$group:{"_id": "$group_name",
+                         "Cantidad":{$sum:1}}},
+                {$sort:{_id:-1}}])
+    .then((result)=>{
+        console.log(result);
+    })
+    .catch((err)=>{
+        console.error(err);
+    })
+};
 
+const asignaturasTop = () =>{
+    Notas
+    .aggregate([{$group:{"_id": "$subject_name",
+                         notaMedia:{$avg:"$mark"}}},
+                {$match:{notaMedia: {$gt:5}}},
+                {$sort:{notaMedia:-1}},
+                {$limit: 5}])
+    .then((result)=>{
+        console.log(result);
+    })
+    .catch((err)=>{
+        console.error(err);
+    })
+};
 
-
-
-
-
-
-
-
-
-
-
+const numeroProfesores = () =>{
+    Notas
+    .aggregate([{$unwind:"$teachers"},
+                {$group:{"_id":{asignatura:"$subject_name", 
+                profesor:{
+                    nombre: "$teachers.teacher_first_name",
+                    apellido: "$teachers.teacher_last_name"
+                }},
+                numeroProfesores: {$sum:1}}}])
+    .then((result)=>{
+        console.log(result);
+    })
+    .catch((err)=>{
+        console.error(err);
+    })
+};
 
 
 notaMedia(); 
 totalAlumnos(); 
-listarAlumnos(); 
+// listarAlumnos(); 
+listarProfesores(); 
+gruposAlumnos(); 
+asignaturasTop();
+numeroProfesores(); 
 
 
 

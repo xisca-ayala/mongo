@@ -1,28 +1,29 @@
 const mongoose = require("mongoose");
+const fs = require('fs'); 
 
-
-const teachersSchema = new mongoose.Schema({
-    firstName: String, 
-    lastName: String,
+const TeachersSchema = new mongoose.Schema({
+    first_name: String, 
+    last_name: String,
     group: [String]
 });
 
-const subjectsSchema = new mongoose.Schema({
+const SubjectsSchema = new mongoose.Schema({
     title: String,
-    teachers: [teachersSchema]
+    teachers: [TeachersSchema]
 });
 
-const marksSchema = new mongoose.Schema({
+const MarksSchema = new mongoose.Schema({
     date: Date,
     mark: Number, 
-    subject: subjectsSchema
+    subject: SubjectsSchema
 });
 
-
-const studentsSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    marks: [marksSchema]
+const StudentsSchema = new mongoose.Schema({
+    first_name: String,
+    last_name: String,
+    marks: [MarksSchema]
 });
 
-module.exports = mongoose.model("academia", studentsSchema, "academia");
+let Academia = mongoose.model("Academia", StudentsSchema, "academia");
+
+module.exports = Academia; 
