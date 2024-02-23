@@ -3,20 +3,8 @@ const Notas = require("./schema");
 
 mongoose.connect('mongodb+srv://xiscaayala:Xismaygi86!@mongonube.e1bi7ij.mongodb.net/Notas');
 
-const createDocument = () =>{
-    let data = {
-        date: "2023-12-05",
-        mark:9, 
-        student_first_name: "Laia",
-        student_last_name: "Gili",
-        group_name: "3A",
-        subject_name: "Javascript",
-        teachers: [{
-            teacher_first_name: "Lola",
-            teacher_last_name:"Martí"
-        }]
-    };
-    let document = new Notas(data); 
+const createDocument = (userData) =>{
+    let document = new Notas(userData); 
     document.save()
     .then((data)=> {
         console.log(data);
@@ -27,11 +15,9 @@ const createDocument = () =>{
     })
 }
 
-createDocument(); 
-
-const notaMedia =() =>{
+const notaMedia =(subjectName) =>{
     Notas
-    .aggregate([{$match: { "subject_name": "Javascript"}},
+    .aggregate([{$match: { "subject_name": subjectName}},
                 {$group:{ _id: null, notaMedia: {$avg: "$mark"}}}])
     .then((result)=>{
         console.log(result);
@@ -96,13 +82,13 @@ const gruposAlumnos = () =>{
     })
 };
 
-const asignaturasTop = () =>{
+const asignaturasTop = (notaMedia, limit) =>{
     Notas
     .aggregate([{$group:{"_id": "$subject_name",
                          notaMedia:{$avg:"$mark"}}},
-                {$match:{notaMedia: {$gt:5}}},
+                {$match:{notaMedia: {$gt:notaMedia}}},
                 {$sort:{notaMedia:-1}},
-                {$limit: 5}])
+                {$limit: limit}])
     .then((result)=>{
         console.log(result);
     })
@@ -129,12 +115,42 @@ const numeroProfesores = () =>{
 };
 
 
-notaMedia(); 
+let userData = {
+    date: "2023-12-05",
+    mark:9, 
+    student_first_name: "Laia",
+    student_last_name: "Gili",
+    group_name: "3A",
+    subject_name: "Javascript",
+    teachers: [{
+        teacher_first_name: "Lola",
+        teacher_last_name:"Martí"
+    }]
+};
+
+let userData2 = {
+    date: "2023-10-05",
+    mark:9, 
+    student_first_name: "Mireia",
+    student_last_name: "Flaquer",
+    group_name: "2A",
+    subject_name: "Maquetació",
+    teachers: [{
+        teacher_first_name: "Lola",
+        teacher_last_name:"Martí"
+    }]
+};
+
+
+
+createDocument(userData1); 
+createDocument(userData2);
+notaMedia("Javascript"); 
 totalAlumnos(); 
 // listarAlumnos(); 
 listarProfesores(); 
 gruposAlumnos(); 
-asignaturasTop();
+asignaturasTop(5,5);
 numeroProfesores(); 
 
 
