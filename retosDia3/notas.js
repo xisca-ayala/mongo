@@ -8,7 +8,6 @@ const createDocument = (userData) =>{
     document.save()
     .then((data)=> {
         console.log(data);
-        mongoose.disconnect();
     })
     .catch((err)=>{
         console.error(err);
@@ -108,6 +107,7 @@ const numeroProfesores = () =>{
                 numeroProfesores: {$sum:1}}}])
     .then((result)=>{
         console.log(result);
+        mongoose.disconnect();
     })
     .catch((err)=>{
         console.error(err);

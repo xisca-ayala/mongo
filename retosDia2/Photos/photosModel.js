@@ -10,7 +10,6 @@ const createPhotoDoc = (userData) =>{
     photoDocument.save()
     .then((data)=> {
         console.log(data);
-        mongoose.disconnect();
     })
     .catch((err)=>{
         console.error(err);
@@ -21,7 +20,6 @@ const getPhotoDoc = (user) => {
    Photos.find({user})
    .then((data)=>{
         console.log(data);
-        mongoose.disconnect();
    })
     .catch((err)=>{
         console.error(err);
@@ -34,7 +32,6 @@ const getPhotoDoc = (user) => {
      .then((data)=>{
          console.log("Se ha modificado correctamente");
          console.log(data);
-            mongoose.disconnect(); 
     })
      .catch((err)=>{
          console.error(err);
@@ -46,7 +43,6 @@ const deletePhoto = (user, title)=> {
     .then((data)=>{
         console.log("Se ha eliminado correctamente la photo");
         console.log(data);
-        mongoose.disconnect(); 
     })
     .catch((err)=>{
         console.error(err);
@@ -58,7 +54,6 @@ const deletePhotos = (user)=> {
     .then((data)=>{
         console.log("Se han eliminado correctamente las photos");
         console.log(data);
-        mongoose.disconnect(); 
     })
     .catch((err)=>{
         console.error(err);
@@ -98,7 +93,7 @@ createPhotoDoc(userData3);
 createPhotoDoc(userData4);
 
 getPhotoDoc("Llucia"); 
-updatePhotosDesc("Pixeris, Núvols, Núvols negres");
+updatePhotosDesc("Pixeris", "Núvols", "Núvols negres");
 deletePhoto("Pep", "Llac"); 
 deletePhotos("Maria"); 
 
